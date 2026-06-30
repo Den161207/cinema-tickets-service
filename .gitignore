@@ -1,0 +1,18 @@
+# Кеш Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Віртуальні середовища
+venv/
+env/
+.venv/
+
+# Файли середовища розробки (IDE)
+.idea/
+.vscode/
+*.swp
+
+# Системні файли ОС
+.DS_Store
+Thumbs.db
