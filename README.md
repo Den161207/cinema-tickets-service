@@ -13,6 +13,6 @@
 * Мова програмування: **Python 3.x**
 
 ## Як запустити
-1. Склонуйте репозиторій: `git clone [https://github.com/Den161207/cinema-tickets-service.git]`
+1. Склонуйте репозиторій: `git clone https://github.com/Den161207/cinema-tickets-service.git`
 2. Відкрийте термінал у папці з проектом.
 3. Запустіть програму командою: `python main.py`
