@@ -1,5 +1,5 @@
 import account_manager
-
+from cinema_core import CinemaCatalog  
 def show_main_menu(is_logged_in):
     print("\n=== Сервіс купівлі квитків в кіно ===")
     if not is_logged_in:
@@ -7,22 +7,21 @@ def show_main_menu(is_logged_in):
         print("2. Увійти в акаунт")
         print("3. Вихід")
     else:
-        print("1. Переглянути афішу (список фільмів)")
-        print("2. Купити квиток")
-        print("3. Особистий кабінет (інформація та історія)")
-        print("4. Вийти з акаунту")
-        print("5. Вихід з програми")
+        print("1. Каталог фільмів та бронювання квитків")
+        print("2. Особистий кабінет (інформація та історія)")
+        print("3. Вийти з акаунту")
+        print("4. Вихід з програми")
     print("=======================================")
 
 def main():
     is_running = True
-    current_user = None # Змінна, що зберігає логін авторизованого користувача
+    current_user = None
+    cinema = CinemaCatalog() 
     
     while is_running:
         show_main_menu(current_user is not None)
         choice = input("Оберіть дію: ").strip()
         
-        # Логіка для НЕавторизованого користувача
         if current_user is None:
             if choice == '1':
                 account_manager.register()
@@ -34,22 +33,22 @@ def main():
             else:
                 print("\nНевірна команда. Спробуйте ще раз.")
                 
-        # Логіка для АВТОРИЗОВАНОГО користувача
         else:
             if choice == '1':
-                print("\n[У розробці Студентом 2] Тут буде список фільмів...")
+                
+                cinema.run_interactive_menu(current_user)
+                
             elif choice == '2':
-                print("\n[У розробці Студентом 2] Тут буде процес купівлі квитка...")
-                # Примітка: Студент 2 має написати функцію, яка після купівлі квитка
-                # буде додавати його в список 'history' поточного користувача.
-            elif choice == '3':
                 account_manager.show_profile(current_user)
-            elif choice == '4':
+                
+            elif choice == '3':
                 print(f"\nКористувач {current_user} вийшов з системи.")
                 current_user = None
-            elif choice == '5':
+                
+            elif choice == '4':
                 print("\nДякуємо за використання сервісу! До побачення.")
                 is_running = False
+                
             else:
                 print("\nНевірна команда. Спробуйте ще раз.")
 
