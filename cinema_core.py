@@ -33,7 +33,7 @@ class Session:
         
         header = "        " + " ".join([f"{i+1:^3}" for i in range(len(self.seats[0]))])
         print(header)
-        
+         
         for row_idx, row in enumerate(self.seats):
             row_display = " ".join(["[X]" if seat == 1 else "[ ]" for seat in row])
             print(f"Ряд {row_idx + 1:<2}: {row_display}")
@@ -47,7 +47,6 @@ class Session:
         else:
             return False
 
-
 class CinemaCatalog:
     """Головний клас для управління каталогом та інтерактивним меню."""
     def __init__(self):
@@ -59,7 +58,6 @@ class CinemaCatalog:
             Movie(5, "Одіссея", "Пригоди, Драма", 120, "Епічна історія виживання та боротьби людини з нещадною стихією."),
             Movie(6, "Людина-павук: Абсолютно новий день", "Екшн, Фантастика", 130, "Пітер Паркер стикається з новим могутнім ворогом, який загрожує всьому місту.")
         ]
-        
         self.sessions = [
             Session(101, self.movies[0], "10:00", "2D"), Session(102, self.movies[0], "12:30", "3D"), Session(103, self.movies[0], "15:00", "2D"),
             Session(201, self.movies[1], "11:00", "2D"), Session(202, self.movies[1], "14:15", "3D"), Session(203, self.movies[1], "17:30", "IMAX"),
@@ -68,11 +66,8 @@ class CinemaCatalog:
             Session(501, self.movies[4], "10:30", "2D"), Session(502, self.movies[4], "16:00", "IMAX"), Session(503, self.movies[4], "19:15", "3D"), Session(504, self.movies[4], "22:00", "2D"),
             Session(601, self.movies[5], "12:00", "3D"), Session(602, self.movies[5], "15:30", "IMAX 3D"), Session(603, self.movies[5], "19:30", "IMAX 3D"), Session(604, self.movies[5], "22:15", "2D")
         ]
-
     def get_sessions_by_movie(self, movie_id: int):
         return [session for session in self.sessions if session.movie.movie_id == movie_id]
-
-    # ДОДАНО ПАРАМЕТР current_user
     def run_interactive_menu(self, current_user=None):
         while True:
             print("\n" + "="*40)

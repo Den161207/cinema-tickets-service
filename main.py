@@ -1,6 +1,5 @@
 import account_manager
 from cinema_core import CinemaCatalog  
-
 def show_main_menu(is_logged_in):
     print("\n=== Сервіс купівлі квитків в кіно ===")
     if not is_logged_in:
@@ -8,7 +7,6 @@ def show_main_menu(is_logged_in):
         print("2. Увійти в акаунт")
         print("3. Вихід")
     else:
-       
         print("1. Каталог фільмів та бронювання квитків")
         print("2. Особистий кабінет (інформація та історія)")
         print("3. Вийти з акаунту")
