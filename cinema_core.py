@@ -1,5 +1,5 @@
 # cinema_core.py
-
+from data_manager import load_users, save_users
 class Movie:
     """Клас для зберігання інформації про фільм."""
     def __init__(self, movie_id: int, title: str, genre: str, duration: int, description: str = ""):
@@ -10,11 +10,9 @@ class Movie:
         self.description = description
 
     def get_short_info(self):
-        """Для головного меню - тільки назва."""
         return self.title
 
     def get_full_info(self):
-        """Для сторінки фільму - повна інформація."""
         return f" Жанр: {self.genre}\n Тривалість: {self.duration} хв.\n Про фільм: {self.description}"
 
 
@@ -29,7 +27,6 @@ class Session:
 
     def show_seats(self):
         print(f"\n=== Сеанс: {self.movie.title} | Час: {self.time} | Формат: {self.format_type} ===")
-        
         screen_width = 8 + (len(self.seats[0]) * 4) - 1
         print(f"{'ЕКРАН':^{screen_width}}")
         print("-" * screen_width)
@@ -75,7 +72,8 @@ class CinemaCatalog:
     def get_sessions_by_movie(self, movie_id: int):
         return [session for session in self.sessions if session.movie.movie_id == movie_id]
 
-    def run_interactive_menu(self):
+    # ДОДАНО ПАРАМЕТР current_user
+    def run_interactive_menu(self, current_user=None):
         while True:
             print("\n" + "="*40)
             print(f"{' КАТАЛОГ ФІЛЬМІВ':^38}")
@@ -84,27 +82,24 @@ class CinemaCatalog:
             for movie in self.movies:
                 print(f"[{movie.movie_id}] {movie.get_short_info()}")
                 
-
             print("-" * 40)
-            print("[0] Вийти з програми")
+            print("[0] Повернутися до головного меню") 
             
             movie_choice = input("\nОберіть номер фільму (або 0 для виходу): ")
             
             if movie_choice == '0':
-                print("Дякуємо, що скористалися нашим сервісом. До побачення!")
-                break
+                break 
                 
             try:
                 movie_id = int(movie_choice)
                 selected_movie = next((m for m in self.movies if m.movie_id == movie_id), None)
                 
                 if not selected_movie:
-                    print("\n❌ Помилка: Фільму з таким номером не існує.")
+                    print("\n Помилка: Фільму з таким номером не існує.")
                     continue
             except ValueError:
-                print("\n❌ Помилка: Будь ласка, введіть число.")
+                print("\n Помилка: Будь ласка, введіть число.")
                 continue
-
 
             print("\n" + "*"*40)
             print(f" {selected_movie.title.upper()}")
@@ -126,15 +121,15 @@ class CinemaCatalog:
             try:
                 session_index = int(session_choice) - 1
                 if session_index < 0 or session_index >= len(movie_sessions):
-                    print("\n❌ Помилка: Такого сеансу немає.")
+                    print("\n Помилка: Такого сеансу немає.")
                     continue
                     
                 selected_session = movie_sessions[session_index]
                 
             except ValueError:
-                print("\n❌ Помилка: Будь ласка, введіть число.")
+                print("\n Помилка: Будь ласка, введіть число.")
                 continue
- 
+
             selected_session.show_seats()
             
             print("\nВведіть ряд та місце. Для кількох квитків використовуйте КОМУ.")
@@ -160,26 +155,30 @@ class CinemaCatalog:
                     row = int(parts[0])
                     seat = int(parts[1])
                     
-
                     if selected_session.book_seat(row, seat):
                         success_tickets.append(f"Ряд {row} Місце {seat}")
+                        
+                        if current_user:
+                            users = load_users() 
+                            ticket_dict = {
+                                "movie": f"{selected_movie.title} ({selected_session.time})",
+                                "row": row,
+                                "seat": seat
+                            }
+                            users[current_user]["history"].append(ticket_dict)
+                            save_users(users) 
+                        # ----------------------------------------
+                            
                     else:
                         failed_tickets.append(f"Ряд {row} Місце {seat}")
                 
-
                 print("\n--- РЕЗУЛЬТАТ БРОНЮВАННЯ ---")
                 if success_tickets:
                     print(f" Успішно заброньовано: {', '.join(success_tickets)}")
                 if failed_tickets:
-                    print(f" Не вдалося забронювати : {', '.join(failed_tickets)}")
+                    print(f" Не вдалося забронювати (зайняті або не існують): {', '.join(failed_tickets)}")
                     
             except ValueError:
                 print("\n Неправильний формат вводу. Використовуйте формат Ряд-Місце (наприклад: 2-5).")
             
-            input("\nНатисніть Enter, щоб повернутися до каталогу фільмів...")
-
-
-
-if __name__ == "__main__":
-    cinema = CinemaCatalog()
-    cinema.run_interactive_menu()
+            input("\nНатисніть Enter, щоб продовжити...")
