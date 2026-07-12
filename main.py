@@ -1,5 +1,7 @@
 import account_manager
 from cinema_core import CinemaCatalog  
+import snacks
+
 def show_main_menu(is_logged_in):
     print("\n=== Сервіс купівлі квитків в кіно ===")
     if not is_logged_in:
@@ -9,8 +11,9 @@ def show_main_menu(is_logged_in):
     else:
         print("1. Каталог фільмів та бронювання квитків")
         print("2. Особистий кабінет (інформація та історія)")
-        print("3. Вийти з акаунту")
-        print("4. Вихід з програми")
+        print("3. Бар кінотеатру (Снеки та напої)")
+        print("4. Вийти з акаунту")
+        print("5. Вихід з програми")
     print("=======================================")
 
 def main():
@@ -35,17 +38,19 @@ def main():
                 
         else:
             if choice == '1':
-                
                 cinema.run_interactive_menu(current_user)
                 
             elif choice == '2':
                 account_manager.show_profile(current_user)
                 
             elif choice == '3':
+                snacks.run_snack_bar(current_user)
+                
+            elif choice == '4':
                 print(f"\nКористувач {current_user} вийшов з системи.")
                 current_user = None
                 
-            elif choice == '4':
+            elif choice == '5':
                 print("\nДякуємо за використання сервісу! До побачення.")
                 is_running = False
                 
