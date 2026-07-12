@@ -1,7 +1,6 @@
 from data_manager import load_users, save_users
 
 def register():
-    """Реєстрація нового користувача."""
     users = load_users()
     
     print("\n--- Реєстрація ---")
@@ -14,12 +13,12 @@ def register():
     password = input("Введіть пароль: ").strip()
     name = input("Введіть ваше ПІБ: ").strip()
     
-    # Створюємо структуру даних для нового користувача
     users[username] = {
         "password": password,
         "name": name,
         "preferences": [],
-        "history": [] 
+        "history": [],
+        "snacks_history": [] 
     }
     
     save_users(users)
@@ -27,7 +26,6 @@ def register():
     return username
 
 def login():
-    """Авторизація існуючого користувача."""
     users = load_users()
     
     print("\n--- Вхід ---")
@@ -42,18 +40,26 @@ def login():
         return None
 
 def show_profile(username):
-    """Відображення інформації про акаунт та історії замовлень."""
     users = load_users()
     user_data = users[username]
     
     print(f"\n--- Особистий кабінет: {user_data['name']} ---")
     print(f"Логін: {username}")
-    print("\nІсторія замовлень/бронювань:")
     
-    if not user_data["history"]:
-        print(" У вас ще немає замовлень.")
+    print("\nІсторія бронювання квитків:")
+    if not user_data.get("history"):
+        print(" У вас ще немає замовлень квитків.")
     else:
         for index, ticket in enumerate(user_data["history"], 1):
             print(f" {index}. Фільм: '{ticket['movie']}', Ряд: {ticket['row']}, Місце: {ticket['seat']}")
+            
+    print("\nІсторія покупок у барі:")
+    snacks = user_data.get("snacks_history", [])
+    if not snacks:
+        print(" Ви ще нічого не купували в барі.")
+    else:
+        for index, order in enumerate(snacks, 1):
+            items_str = ", ".join(order["items"])
+            print(f" {index}. Замовлення: {items_str} | Сума: {order['total']} грн.")
             
     print("-----------------------------------")
